@@ -1,18 +1,21 @@
 // src/firebase.js
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
 
+// 🔴 REPLACE ALL VALUES BELOW with your real config from Firebase console
 const firebaseConfig = {
-  apiKey: "AIzaSyDIi2lRVb1v6k5C61pG1MEj1bCje_yu-wc",
-  authDomain: "shri-projects.firebaseapp.com",
-  projectId: "shri-projects",
-  storageBucket: "shri-projects.appspot.com",
-  messagingSenderId: "143635503612",
-  appId: "1:143635503612:web:df0b1032ec30d242aaba79",
+  apiKey: "AIzaSyABCD123",
+  authDomain: "shristore-12345.firebaseapp.com",
+  projectId: "shristore-12345",
+  storageBucket: "shristore-12345.appspot.com",
+  messagingSenderId: "9876543210",
+  appId: "1:9876543210:web:xyz123",
 };
 
+
+// ✅ Initialize app once
 const app = initializeApp(firebaseConfig);
+
+// ✅ Export auth + Google provider
 export const auth = getAuth(app);
 export const googleProvider = new GoogleAuthProvider();
-export const db = getFirestore(app);
