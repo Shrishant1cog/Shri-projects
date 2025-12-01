@@ -11,6 +11,9 @@ import Contact from "./components/Contact.jsx";
 import Footer from "./components/Footer.jsx";
 
 const Checkout = lazy(() => import("./components/Checkout.jsx"));
+const CartPage = lazy(() => import("./pages/CartPage.jsx"));
+const OrderSuccess = lazy(() => import("./pages/OrderSuccess.jsx"));
+const Orders = lazy(() => import("./pages/Orders.jsx"));
 const Login = lazy(() => import("./pages/Login.jsx"));
 const Signup = lazy(() => import("./pages/Signup.jsx"));
 const Admin = lazy(() => import("./admin/Admin.jsx"));
@@ -49,6 +52,42 @@ export default function App() {
                     <>
                       <Navbar />
                       <Checkout />
+                      <Footer />
+                    </>
+                  </RequireAuth>
+                }
+              />
+
+              {/* Cart page (persistent route) */}
+              <Route
+                path="/cart"
+                element={
+                  <>
+                    <Navbar />
+                    <CartPage />
+                    <Footer />
+                  </>
+                }
+              />
+
+              <Route
+                path="/order-success"
+                element={
+                  <>
+                    <Navbar />
+                    <OrderSuccess />
+                    <Footer />
+                  </>
+                }
+              />
+
+              <Route
+                path="/orders"
+                element={
+                  <RequireAuth>
+                    <>
+                      <Navbar />
+                      <Orders />
                       <Footer />
                     </>
                   </RequireAuth>

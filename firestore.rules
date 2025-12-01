@@ -1,0 +1,30 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Users can read and write their own profile document
+    match /users/{userId} {
+      allow read, update, delete: if request.auth != null && request.auth.uid == userId;
+      allow create: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // Orders: users may read their orders only; writes for orders should be performed by server
+    match /orders/{orderId} {
+      allow read: if request.auth != null && request.auth.uid == resource.data.uid;
+
+      // deny client-side creation and deletion — encourage server-side writes using Admin SDK
+      allow create: if false;
+      allow update: if false;
+      allow delete: if false;
+    }
+
+    // webhook_events: server-side only
+    match /webhook_events/{docId} {
+      allow read, write: if false; // only admin SDK should write
+    }
+
+    // default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

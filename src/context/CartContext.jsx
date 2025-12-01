@@ -1,9 +1,18 @@
-import React, { createContext, useState, useContext } from 'react'
+import React, { createContext, useState, useContext, useEffect } from 'react'
 
 const CartContext = createContext()
 
 export function CartProvider({ children }) {
-  const [cartItems, setCartItems] = useState([])
+  // initialize from localStorage so cart persists across refreshes
+  const [cartItems, setCartItems] = useState(() => {
+    try {
+      const raw = localStorage.getItem('shri_cart')
+      return raw ? JSON.parse(raw) : []
+    } catch (e) {
+      console.warn('Failed to parse cart from localStorage', e)
+      return []
+    }
+  })
   const [wishlist, setWishlist] = useState([])
 
   const addToCart = (product) => {
@@ -41,8 +50,19 @@ export function CartProvider({ children }) {
   const getTotalPrice = () => cartItems.reduce((sum, item) => sum + (item.price * item.qty), 0)
   const getTotalItems = () => cartItems.reduce((sum, item) => sum + item.qty, 0)
 
+  // persist cart to localStorage whenever cart changes
+  useEffect(() => {
+    try {
+      localStorage.setItem('shri_cart', JSON.stringify(cartItems))
+    } catch (e) {
+      console.warn('Failed to save cart to localStorage', e)
+    }
+  }, [cartItems])
+
+  const clearCart = () => setCartItems([])
+
   return (
-    <CartContext.Provider value={{ cartItems, addToCart, removeFromCart, updateQty, wishlist, toggleWishlist, getTotalPrice, getTotalItems }}>
+    <CartContext.Provider value={{ cartItems, addToCart, removeFromCart, updateQty, clearCart, wishlist, toggleWishlist, getTotalPrice, getTotalItems }}>
       {children}
     </CartContext.Provider>
   )

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 
 export default function Login() {
@@ -8,15 +8,20 @@ export default function Login() {
   const { login, signInWithGoogle } = useAuth()
   const navigate = useNavigate()
 
+  const location = useLocation()
+  const from = location.state?.from?.pathname || '/'
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     const res = await login(email, password)
-    if (res.ok) navigate('/')
+    if (res.ok) navigate(from)
+    else alert(res.error?.message || 'Login failed. Check credentials.')
   }
 
   const handleGoogle = async () => {
     const res = await signInWithGoogle()
-    if (res.ok) navigate('/')
+    if (res.ok) navigate(from)
+    else alert(res.error?.message || 'Google sign in failed.')
   }
 
   return (
