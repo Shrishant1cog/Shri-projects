@@ -1,33 +1,68 @@
 // src/context/AuthContext.jsx
-// Auth is disabled in this project (no Firebase).
-// This file just provides a safe dummy context so the rest of the app works.
-
-import React, { createContext, useContext, useState } from "react";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  useMemo,
+} from "react";
+import {
+  onAuthStateChanged,
+  signInWithPopup,
+  signOut,
+} from "firebase/auth";
+import { auth, googleProvider } from "../firebase";
 
 const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
-  const [loading] = useState(false);
+  const [user, setUser] = useState(null);      // firebase user object
+  const [loading, setLoading] = useState(true); // true until we know if logged in
 
-  // Dummy login/logout functions so components won't crash if they call them
+  useEffect(() => {
+    const unsub = onAuthStateChanged(auth, (firebaseUser) => {
+      setUser(firebaseUser || null);
+      setLoading(false);
+    });
+
+    return () => unsub();
+  }, []);
+
   const loginWithGoogle = async () => {
-    alert("Login is disabled in this demo build.");
+    try {
+      await signInWithPopup(auth, googleProvider);
+      // user state will update automatically from onAuthStateChanged
+    } catch (error) {
+      console.error("Google sign-in error:", error);
+      alert("Google sign in failed. Please try again.");
+    }
   };
 
   const logout = async () => {
-    setUser(null);
+    try {
+      await signOut(auth);
+    } catch (error) {
+      console.error("Logout error:", error);
+      alert("Logout failed. Please try again.");
+    }
   };
 
-  const value = {
-    user,
-    loading,
-    isAuthenticated: !!user,
-    loginWithGoogle,
-    logout,
-  };
+  const value = useMemo(
+    () => ({
+      user,
+      loading,
+      isAuthenticated: !!user,
+      loginWithGoogle,
+      logout,
+    }),
+    [user, loading]
+  );
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={value}>
+      {children}
+    </AuthContext.Provider>
+  );
 }
 
 export function useAuth() {

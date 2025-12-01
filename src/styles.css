@@ -2,6 +2,7 @@
   /* Theme tokens */
   --bg: #f7fafc;
   --surface: #ffffff;
+  --card: #ffffff;
   --muted: #6b7280;
   --accent: #ff7a18;
   --primary: #0b5fff;
@@ -877,3 +878,110 @@ img { max-width: 100%; height: auto; display: block; }
 /* Performance: prefer transform for hover effects to reduce repaints */
 .product-card { will-change: transform; }
 .product-card:hover { transform: translateY(-4px); }
+
+/* ===== Checkout page layout & animations ===== */
+
+/* Fade-in for pages/sections */
+.fade-in {
+  animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Slide-up for summary card */
+.slide-up {
+  animation: slideUpCheckout 0.6s ease-out;
+}
+
+@keyframes slideUpCheckout {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Checkout layout */
+.checkout-page {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.checkout-title {
+  margin-bottom: 16px;
+}
+
+.checkout-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1.3fr);
+  gap: 24px;
+  margin-top: 16px;
+}
+
+.checkout-form label,
+.checkout-form input,
+.checkout-form textarea {
+  width: 100%;
+}
+
+.checkout-form label {
+  font-size: 0.9rem;
+  margin-bottom: 10px;
+}
+
+.checkout-form input,
+.checkout-form textarea {
+  margin-top: 4px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  font-family: inherit;
+  font-size: 0.9rem;
+}
+
+.checkout-row {
+  display: flex;
+  gap: 12px;
+}
+
+.checkout-summary .summary-items {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 12px;
+}
+
+.summary-item,
+.summary-line {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  font-size: 0.9rem;
+}
+
+.summary-total {
+  margin-top: 8px;
+  font-weight: 600;
+}
+
+.free {
+  color: #16a34a;
+}
+
+.small-note {
+  font-size: 0.8rem;
+  color: #64748b;
+  margin-top: 8px;
+}
+
+/* Use existing .btn styles + this for full-width pay button */
+.pay-button {
+  width: 100%;
+  margin-top: 8px;
+}
+
+/* Mobile: stack layout */
+@media (max-width: 768px) {
+  .checkout-layout {
+    grid-template-columns: 1fr;
+  }
+}
