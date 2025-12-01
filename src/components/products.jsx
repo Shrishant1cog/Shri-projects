@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
 
 const allProducts = [
@@ -53,6 +54,19 @@ export default function Products() {
     <section id="products" className="products-section">
       <div className="container">
         <h2 className="section-title">🛒 Featured Products</h2>
+
+        {/* Mobile filter bar (visible on small screens) */}
+        <div className="mobile-filters" role="region" aria-label="Filters">
+          <select value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)}>
+            {categories.map(c => <option key={c} value={c}>{c === 'all' ? 'All' : c.charAt(0).toUpperCase()+c.slice(1)}</option>)}
+          </select>
+          <select value={sortBy} onChange={(e)=>setSortBy(e.target.value)}>
+            <option value="popular">Most Popular</option>
+            <option value="price-asc">Price: Low to High</option>
+            <option value="price-desc">Price: High to Low</option>
+            <option value="rating">Highest Rated</option>
+          </select>
+        </div>
 
         <div className="products-wrapper">
           {/* Sidebar Filters */}
@@ -124,6 +138,7 @@ export default function Products() {
 
 function ProductCard({ product, onAddCart, isWishlisted, onToggleWishlist }) {
   const [showNotification, setShowNotification] = useState(false)
+  const navigate = useNavigate()
 
   const handleAddCart = () => {
     onAddCart(product)
@@ -131,14 +146,34 @@ function ProductCard({ product, onAddCart, isWishlisted, onToggleWishlist }) {
     setTimeout(() => setShowNotification(false), 2000)
   }
 
+  const handleBuyNow = () => {
+    onAddCart(product)
+    setShowNotification(true)
+    setTimeout(() => setShowNotification(false), 2000)
+    navigate('/checkout')
+  }
+
   return (
     <div className="product-card">
       <div className="product-image-wrapper">
-        <div className="product-image" style={{ backgroundColor: `hsl(${product.id * 45}, 70%, 80%)` }} />
+        <img
+          className="product-image"
+          src={`https://picsum.photos/seed/prod-${product.id}/600/400`}
+          srcSet={
+            `https://picsum.photos/seed/prod-${product.id}/300/200 300w, ` +
+            `https://picsum.photos/seed/prod-${product.id}/600/400 600w, ` +
+            `https://picsum.photos/seed/prod-${product.id}/900/600 900w`
+          }
+          sizes="(max-width: 600px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          alt={product.name}
+          loading="lazy"
+          decoding="async"
+        />
         <button
           className={`wishlist-btn ${isWishlisted ? 'active' : ''}`}
           onClick={() => onToggleWishlist(product.id)}
           title={isWishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
+          aria-pressed={isWishlisted}
         >
           ❤️
         </button>
@@ -156,7 +191,7 @@ function ProductCard({ product, onAddCart, isWishlisted, onToggleWishlist }) {
           <button className="btn btn-add-cart" onClick={handleAddCart}>
             🛒 Add to Cart
           </button>
-          <button className="btn btn-buy-now">
+          <button className="btn btn-buy-now" onClick={handleBuyNow}>
             ⚡ Buy Now
           </button>
         </div>

@@ -1,8 +1,11 @@
 import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
+import { useAuth } from '../context/AuthContext'
 
 export default function Navbar() {
   const { getTotalItems } = useCart()
+  const { user, logout } = useAuth()
   const [searchQuery, setSearchQuery] = useState('')
   const [showCart, setShowCart] = useState(false)
   const [showMenu, setShowMenu] = useState(false)
@@ -16,7 +19,9 @@ export default function Navbar() {
               <h1 className="brand-logo">🛍️ ShriStore</h1>
             </div>
 
-            <div className="navbar-search">
+            <div style={{display:'flex',alignItems:'center',gap:8}}>
+              <button className="hamburger" aria-label="Open menu" onClick={() => setShowMenu(v=>!v)}>☰</button>
+              <div className="navbar-search">
               <input
                 type="text"
                 className="search-input"
@@ -25,12 +30,31 @@ export default function Navbar() {
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
               <button className="search-btn">🔍</button>
+              </div>
             </div>
 
             <div className="navbar-actions">
-              <button className="nav-action-btn" onClick={() => setShowMenu(!showMenu)}>
-                👤 Account
-              </button>
+              {user ? (
+                <div className="user-dropdown">
+                  <button className="user-btn" onClick={() => setShowMenu(v => !v)}>
+                    👤 {user.name || user.displayName || user.email}
+                  </button>
+                  {showMenu && (
+                    <div className="menu-dropdown desktop-menu">
+                      <Link to="/profile">My Profile</Link>
+                      <Link to="/orders">My Orders</Link>
+                      <Link to="/wishlist">Wishlist</Link>
+                      <button className="logout-btn" onClick={async () => { await logout(); setShowMenu(false) }}>Logout</button>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className="auth-links">
+                  <Link to="/login" className="nav-link">Login</Link>
+                  <Link to="/signup" className="nav-link">Sign up</Link>
+                </div>
+              )}
+
               <button className="nav-action-btn cart-btn" onClick={() => setShowCart(!showCart)}>
                 🛒 Cart
                 {getTotalItems() > 0 && <span className="cart-badge">{getTotalItems()}</span>}
@@ -39,13 +63,36 @@ export default function Navbar() {
           </div>
 
           {showMenu && (
-            <div className="menu-dropdown">
-              <a href="#profile">My Profile</a>
-              <a href="#orders">My Orders</a>
-              <a href="#wishlist">Wishlist</a>
-              <a href="#settings">Settings</a>
-              <a href="#logout">Logout</a>
-            </div>
+            <>
+              <div className="menu-dropdown desktop-menu">
+                <a href="#profile">My Profile</a>
+                <a href="#orders">My Orders</a>
+                <a href="#wishlist">Wishlist</a>
+                <a href="#settings">Settings</a>
+                {user ? <button className="logout-btn" onClick={async () => { await logout(); setShowMenu(false) }}>Logout</button> : <a href="/login">Login</a>}
+              </div>
+
+              {/* Mobile slide-out nav + overlay */}
+              <div className="mobile-nav-overlay" onClick={() => setShowMenu(false)} />
+
+              <aside className={`mobile-nav ${showMenu ? 'open' : ''}`} aria-hidden={!showMenu}>
+                <div className="mobile-nav-header">
+                  <h3>Menu</h3>
+                  <button className="mobile-close" aria-label="Close menu" onClick={() => setShowMenu(false)}>✕</button>
+                </div>
+                <nav className="mobile-nav-links">
+                  <a href="#profile" onClick={() => setShowMenu(false)}>My Profile</a>
+                  <a href="#orders" onClick={() => setShowMenu(false)}>My Orders</a>
+                  <a href="#wishlist" onClick={() => setShowMenu(false)}>Wishlist</a>
+                  <a href="#settings" onClick={() => setShowMenu(false)}>Settings</a>
+                  {user ? (
+                    <button className="logout-btn" onClick={async () => { await logout(); setShowMenu(false) }}>Logout</button>
+                  ) : (
+                    <a href="/login" onClick={() => setShowMenu(false)}>Login</a>
+                  )}
+                </nav>
+              </aside>
+            </>
           )}
         </div>
       </header>
@@ -90,7 +137,7 @@ function CartModal({ onClose }) {
               <div className="cart-total">
                 <strong>Total: ₹{getTotalPrice().toLocaleString()}</strong>
               </div>
-              <button className="btn btn-checkout">Proceed to Checkout</button>
+              <Link to="/checkout" className="btn btn-checkout" onClick={onClose}>Proceed to Checkout</Link>
             </div>
           </>
         )}
