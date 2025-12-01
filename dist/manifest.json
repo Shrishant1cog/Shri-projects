@@ -1,0 +1,15 @@
+{
+  "short_name": "ShriStore",
+  "name": "Shri Store — Modern E-commerce Demo",
+  "icons": [
+    {
+      "src": "/logo.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml"
+    }
+  ],
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#0b5fff",
+  "background_color": "#ffffff"
+}
