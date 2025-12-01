@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { useAuth } from '../context/AuthContext'
 import { auth } from '../firebase'
 import { Link } from 'react-router-dom'
-import { Link } from 'react-router-dom'
 
 export default function Orders() {
   const { user, loading: authLoading } = useAuth()
@@ -16,7 +15,6 @@ export default function Orders() {
       return
     }
     if (authLoading) {
-      // wait until auth finishes
       setLoading(true)
       return
     }
@@ -70,7 +68,7 @@ export default function Orders() {
                   <div>
                     <strong>Order:</strong> {o.razorpay_order_id || o.order_id || o.id}
                   </div>
-                  <div>₹{(o.amount/100).toLocaleString()}</div>
+                  <div>₹{(o.amount / 100).toLocaleString()}</div>
                 </div>
                 <div style={{ marginTop: 8 }}>
                   <small>Payment id: {o.razorpay_payment_id}</small>
