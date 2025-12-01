@@ -7,40 +7,53 @@
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-    <title>Shri Store — Modern E‑commerce Demo</title>
+    <title>Shri Store — Modern E-commerce Demo</title>
 
     <!-- Primary Meta Tags -->
-    <meta name="description" content="Shri Store — demo e-commerce built with React + Vite. Fast, responsive, and production-ready UI." />
+    <meta
+      name="description"
+      content="Shri Store — demo e-commerce built with React + Vite. Fast, responsive, and production-ready UI."
+    />
     <meta name="theme-color" content="#0b5fff" />
 
     <!-- Open Graph / FB -->
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Shri Store" />
-    <meta property="og:description" content="Shri Store — demo e-commerce built with React + Vite." />
+    <meta
+      property="og:description"
+      content="Shri Store — demo e-commerce built with React + Vite."
+    />
     <meta property="og:image" content="/og-image.png" />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
 
-    <!-- Favicons (SVG placeholders added) -->
+    <!-- Favicons -->
     <link rel="icon" href="/favicon.ico" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <!-- PNG fallbacks for older platforms (placeholders) -->
     <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
     <link rel="icon" type="image/png" sizes="512x512" href="/icon-512.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/logo.svg" />
     <link rel="manifest" href="/manifest.json" />
-    <!-- Microsoft tile -->
     <meta name="msapplication-TileColor" content="#0b5fff" />
     <meta name="msapplication-TileImage" content="/icon-192.png" />
-    <!-- Open Graph image -->
-    <meta property="og:image" content="/og-image.svg" />
-    <noscript>
-      <style>body{visibility:visible}</style>
-      <div style="padding:20px;text-align:center;background:#fff;border-bottom:1px solid #eee">JavaScript is required for full functionality. Please enable JavaScript in your browser.</div>
-    </noscript>
   </head>
   <body>
+    <!-- Shown only when JS is disabled -->
+    <noscript>
+      <div
+        style="
+          padding: 20px;
+          text-align: center;
+          background: #fff;
+          border-bottom: 1px solid #eee;
+        "
+      >
+        JavaScript is required for full functionality. Please enable JavaScript
+        in your browser.
+      </div>
+    </noscript>
+
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
